@@ -8,4 +8,5 @@ public interface ForexService {
 
 	Mono<Object> fetchAllExchangeRates(String accessKey);
 
+    Mono<String> getBitcoinsRequiredForCollateral(String accessKey, String dollars);
 }

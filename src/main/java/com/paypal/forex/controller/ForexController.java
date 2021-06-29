@@ -30,6 +30,17 @@ public class ForexController {
 		this.forexService = forexService;
 		this.env = env;
 	}
+
+
+	@GetMapping("/USD/{dollars}")
+	public Mono<String> displayExchangeRates(@PathVariable String dollars) throws ParseException {
+
+		logger.info("Request to get number of bitcoins required for collateral against : " + dollars + " USD");
+		String accessKey = env.getProperty("app.api.key");
+
+		return forexService.getBitcoinsRequiredForCollateral(accessKey, dollars);
+
+	}
     
     /**
      * This is our main API which passes date and base and target currency to fetch exchange rates from api.exchangerates.io 
@@ -53,6 +64,8 @@ public class ForexController {
      * @return
      * @throws ParseException
      */
+
+
 	
     @GetMapping("/{baseCurrency}/{targetCurrency}")
 	public Mono<Object> displayExchangeRates(@PathVariable String baseCurrency, @PathVariable String targetCurrency) throws ParseException {
@@ -63,7 +76,8 @@ public class ForexController {
     	return forexService.fetchExchangeRates(accessKey, baseCurrency, targetCurrency);
     	
 	}
-    
+
+
     /**
      * This API is only accessible to trial users, so we will use this and display all exchange rates with base as Euro.
      * 
