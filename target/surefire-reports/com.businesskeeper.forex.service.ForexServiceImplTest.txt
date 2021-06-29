@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: com.businesskeeper.forex.service.ForexServiceImplTest
--------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.181 s - in com.businesskeeper.forex.service.ForexServiceImplTest

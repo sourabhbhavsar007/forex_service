@@ -1,15 +1,14 @@
 package com.paypal.forex.controller;
 
 import java.text.ParseException;
+import java.util.List;
 
+import com.paypal.forex.entity.TransactionRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.paypal.forex.service.ForexService;
 
@@ -58,7 +57,6 @@ public class ForexController {
      *
      *
      *
-     * @param date
      * @param baseCurrency
      * @param targetCurrency
      * @return
@@ -98,5 +96,18 @@ public class ForexController {
     	return forexService.fetchAllExchangeRates(accessKey);
     	
 	}
-	
+
+
+	@PostMapping("/transaction")
+	private void saveStudent(@RequestBody TransactionRecord record)
+	{
+		forexService.persistAudit(record);
+	}
+
+	@GetMapping("/notify/{currentBTC}")
+	private List<TransactionRecord> getAllNotificationRecords(@PathVariable String currentBTC){
+		double currentPrice = Double.parseDouble(currentBTC);
+		return forexService.getAllNotificationRecords(currentPrice);
+	}
+
 }

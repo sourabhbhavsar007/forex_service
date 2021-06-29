@@ -1,12 +1,17 @@
 package com.paypal.forex.service;
 
+import com.paypal.forex.entity.TransactionRecord;
+import com.paypal.forex.repository.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class ForexServiceImpl implements ForexService {
@@ -18,10 +23,14 @@ public class ForexServiceImpl implements ForexService {
     private static final Logger logger = LoggerFactory.getLogger(ForexServiceImpl.class);
     private static final String accessKey = "F84264D3-3489-450A-890F-221FD89BBF0F";
     private final WebClient webClient;
-    
-    
-    public ForexServiceImpl() {
-    	
+
+	@Autowired
+	TransactionRepository transactionRepository;
+
+	public ForexServiceImpl(TransactionRepository transactionRepository) {
+
+		this.transactionRepository = transactionRepository;
+
         this.webClient =  WebClient.builder()
                 .baseUrl(EXCHANGE_RATES_API_BASE_URL)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, EXCHANGE_RATES_API_MIME_TYPE)
@@ -67,6 +76,16 @@ public class ForexServiceImpl implements ForexService {
 				.retrieve()
 				.bodyToMono(String.class).log()
 				.onErrorResume(e -> Mono.just("Error occurred :  " + e.getMessage())); //fallback
+	}
+
+	@Override
+	public void persistAudit(TransactionRecord record) {
+		transactionRepository.save(record);
+	}
+
+	@Override
+	public List<TransactionRecord> getAllNotificationRecords(double currentPrice) {
+		return transactionRepository.getAllNotificationRecords(currentPrice);
 	}
 
 }

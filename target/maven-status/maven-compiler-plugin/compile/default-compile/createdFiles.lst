@@ -1,6 +1,0 @@
-com/businesskeeper/forex/controller/ForexController.class
-com/businesskeeper/forex/model/Rates.class
-com/businesskeeper/forex/ForexApplication.class
-com/businesskeeper/forex/service/ForexService.class
-com/businesskeeper/forex/model/ExchangeResponse.class
-com/businesskeeper/forex/service/ForexServiceImpl.class
